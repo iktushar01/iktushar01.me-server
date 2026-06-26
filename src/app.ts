@@ -12,17 +12,14 @@ import { auth } from "./app/lib/auth";
 
 const app: Application = express();
 
-const templateCandidates = [
-    path.resolve(process.cwd(), "api/_dist/app/templates"),
-    path.resolve(process.cwd(), "src/app/templates"),
-    path.resolve(process.cwd(), "dist/app/templates"),
-];
-const templatesDir =
-    templateCandidates.find((dir) => fs.existsSync(dir)) ??
-    templateCandidates[0]!;
-
+const templatesDir = path.resolve(process.cwd(), "src/app/templates");
 app.set("view engine", "ejs");
-app.set("views", templatesDir);
+app.set(
+  "views",
+  fs.existsSync(templatesDir)
+    ? templatesDir
+    : path.resolve(process.cwd(), "dist/app/templates")
+);
 
 const corsOptions = {
     origin: [

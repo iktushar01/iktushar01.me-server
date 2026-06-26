@@ -1,15 +1,25 @@
 {
   "version": 2,
-  "buildCommand": "npm run build",
-  "rewrites": [
+  "installCommand": "pnpm install",
+  "buildCommand": "pnpm run build",
+  "builds": [
     {
-      "source": "/(.*)",
-      "destination": "/api"
+      "src": "dist/server.js",
+      "use": "@vercel/node",
+      "config": {
+        "includeFiles": [
+          "dist/generated/prisma/**",
+          "dist/app/**",
+          "src/app/templates/**"
+        ]
+      }
     }
   ],
-  "functions": {
-    "api/index.js": {
-      "maxDuration": 30
+  "routes": [
+    {
+      "src": "/(.*)",
+      "dest": "dist/server.js"
     }
-  }
+  ],
+  "regions": ["sin1"]
 }

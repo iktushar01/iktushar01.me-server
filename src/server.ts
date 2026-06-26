@@ -40,6 +40,15 @@ const bootstrap = async () => {
   }
 };
 
+if (process.env.VERCEL === "1") {
+  seedSuperAdmin().catch((error) => {
+    console.error("Super admin seed skipped due to startup error:", error);
+  });
+  seedPortfolio().catch((error) => {
+    console.error("Portfolio seed skipped due to startup error:", error);
+  });
+}
+
 if (process.env.VERCEL !== "1") {
   bootstrap();
 }
