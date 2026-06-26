@@ -1,5 +1,4 @@
 import type { Prisma } from "../../../generated/prisma/index";
-import { PrismaClientKnownRequestError } from "../../../generated/prisma/runtime/client";
 import { Role, UserStatus } from "../../lib/prisma-exports";
 import AppError from "../../errorHelpers/AppError";
 import { auth } from "../../lib/auth";
@@ -141,7 +140,15 @@ const registerStudent = async (payload: IRegisterStudent, fileBuffer?: Buffer, f
             console.error("Rollback failed for user:", authData.user.id, rollbackErr);
         }
 
-        if (error instanceof PrismaClientKnownRequestError && error.code === "P2002") {
+        const prismaErrorCode =
+            typeof error === "object" &&
+            error !== null &&
+            "code" in error &&
+            typeof (error as { code: unknown }).code === "string"
+                ? (error as { code: string }).code
+                : null;
+
+        if (prismaErrorCode === "P2002") {
             throw new AppError(
                 StatusCodes.CONFLICT,
                 "This email is already registered. Please log in or use a different email."
