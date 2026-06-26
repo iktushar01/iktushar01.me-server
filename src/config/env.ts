@@ -5,6 +5,10 @@ import { SignOptions } from "jsonwebtoken";
 import AppError from "../app/errorHelpers/AppError";
 dotenv.config();
 
+if (!process.env.NODE_ENV) {
+    process.env.NODE_ENV = process.env.VERCEL === "1" ? "production" : "development";
+}
+
 interface EnvConfig {
     PORT: string;
     NODE_ENV: string;
