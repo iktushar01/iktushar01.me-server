@@ -1,7 +1,8 @@
-import express, { Application, NextFunction, Request, Response } from "express";
+import express, { Application, Request, Response } from "express";
 import cors from "cors";
 import cookieParser from "cookie-parser";
 import { toNodeHandler } from "better-auth/node";
+import fs from "node:fs";
 import path from "node:path";
 import { envVars } from "./config/env";
 import { IndexRoute } from "./app/routes/index";
@@ -11,11 +12,23 @@ import { auth } from "./app/lib/auth";
 
 const app: Application = express();
 
+const templatesDir = path.resolve(process.cwd(), "src/app/templates");
 app.set("view engine", "ejs");
-app.set("views",path.resolve(process.cwd(), `src/app/templates`) )
+app.set(
+  "views",
+  fs.existsSync(templatesDir)
+    ? templatesDir
+    : path.resolve(process.cwd(), "dist/app/templates")
+);
 
 const corsOptions = {
-    origin: [envVars.FRONTEND_URL, envVars.BETTER_AUTH_URL, "http://localhost:3000", "http://localhost:5000"],
+    origin: [
+        envVars.FRONTEND_URL,
+        envVars.BETTER_AUTH_URL,
+        "http://localhost:3000",
+        "http://localhost:5000",
+        ...(process.env.VERCEL_URL ? [`https://${process.env.VERCEL_URL}`] : []),
+    ],
     credentials: true,
     methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
     allowedHeaders: ["Content-Type", "Authorization"],

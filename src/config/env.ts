@@ -38,7 +38,6 @@ interface EnvConfig {
 }
 
 const requiredEnvVariables = [
-    "PORT",
     "NODE_ENV",
     "BETTER_AUTH_URL",
     "FRONTEND_URL",
@@ -74,6 +73,10 @@ requiredEnvVariables.forEach((variable) => {
         throw new AppError(StatusCodes.INTERNAL_SERVER_ERROR, `Environment variable ${variable} is not defined`);
     }
 });
+
+if (!process.env.PORT) {
+    process.env.PORT = "5000";
+}
 
 const loadEnvVariables = (): EnvConfig => {
     return {
