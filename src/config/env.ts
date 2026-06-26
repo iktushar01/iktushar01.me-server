@@ -1,8 +1,6 @@
 import dotenv from "dotenv";
-import { StatusCodes } from "http-status-codes";
 import { SignOptions } from "jsonwebtoken";
 
-import AppError from "../app/errorHelpers/AppError";
 dotenv.config();
 
 if (!process.env.NODE_ENV) {
@@ -50,10 +48,9 @@ const requiredEnvVariables = [
 
 requiredEnvVariables.forEach((variable) => {
     if (!process.env[variable]) {
-        throw new AppError(
-            StatusCodes.INTERNAL_SERVER_ERROR,
-            `Environment variable ${variable} is not defined`
-        );
+        const message = `Environment variable ${variable} is not defined`;
+        console.error(`[env] ${message}`);
+        throw new Error(message);
     }
 });
 

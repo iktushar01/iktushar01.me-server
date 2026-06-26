@@ -10,8 +10,7 @@
   ],
   "functions": {
     "api/index.js": {
-      "maxDuration": 30,
-      "includeFiles": "{dist,src/app/templates}/**"
+      "maxDuration": 30
     }
   },
   "regions": ["sin1"]
