@@ -3,6 +3,8 @@ node_modules
 .env.*
 !.env.example
 dist
-api/_dist
+api/index.js
+api/templates
+api/generated
 src/generated
 .vercel

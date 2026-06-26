@@ -2,16 +2,23 @@
   "version": 2,
   "installCommand": "pnpm install",
   "buildCommand": "pnpm run build",
-  "rewrites": [
+  "builds": [
     {
-      "source": "/(.*)",
-      "destination": "/api"
+      "src": "api/index.js",
+      "use": "@vercel/node",
+      "config": {
+        "includeFiles": [
+          "api/templates/**",
+          "api/generated/**"
+        ]
+      }
     }
   ],
-  "functions": {
-    "api/index.js": {
-      "maxDuration": 30
+  "routes": [
+    {
+      "src": "/(.*)",
+      "dest": "api/index.js"
     }
-  },
+  ],
   "regions": ["sin1"]
 }

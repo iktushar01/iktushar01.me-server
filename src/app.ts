@@ -13,7 +13,7 @@ import { auth } from "./app/lib/auth";
 const app: Application = express();
 
 const templateCandidates = [
-    path.resolve(process.cwd(), "api/_dist/app/templates"),
+    path.resolve(process.cwd(), "api/templates"),
     path.resolve(process.cwd(), "src/app/templates"),
     path.resolve(process.cwd(), "dist/app/templates"),
 ];
