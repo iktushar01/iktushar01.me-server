@@ -1,4 +1,5 @@
-import { Prisma } from "../../../generated/prisma/index";
+import type { Prisma } from "../../../generated/prisma/index";
+import { PrismaClientKnownRequestError } from "../../../generated/prisma/runtime/client";
 import { Role, UserStatus } from "../../lib/prisma-exports";
 import AppError from "../../errorHelpers/AppError";
 import { auth } from "../../lib/auth";
@@ -129,7 +130,7 @@ const registerStudent = async (payload: IRegisterStudent, fileBuffer?: Buffer, f
             accessToken,
             refreshToken,
         };
-    } catch (error) {
+    } catch (error: unknown) {
         // Rollback the auth user and delete the uploaded image if needed
         try {
             if (imageUrl) {
@@ -140,10 +141,7 @@ const registerStudent = async (payload: IRegisterStudent, fileBuffer?: Buffer, f
             console.error("Rollback failed for user:", authData.user.id, rollbackErr);
         }
 
-        if (
-            error instanceof Prisma.PrismaClientKnownRequestError &&
-            error.code === "P2002"
-        ) {
+        if (error instanceof PrismaClientKnownRequestError && error.code === "P2002") {
             throw new AppError(
                 StatusCodes.CONFLICT,
                 "This email is already registered. Please log in or use a different email."
