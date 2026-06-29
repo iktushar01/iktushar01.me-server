@@ -11,7 +11,7 @@
     "start": "tsx src/server.ts",
     "build": "prisma generate && tsc && node scripts/copy-generated-prisma.js && node scripts/fix-imports.js && node scripts/build-vercel.js",
     "postinstall": "prisma generate",
-    "vercel-build": "pnpm run build",
+    "vercel-build": "prisma migrate deploy && pnpm run build",
     "seed:portfolio": "tsx src/app/utils/run-seed-portfolio.ts"
   },
   "dependencies": {
