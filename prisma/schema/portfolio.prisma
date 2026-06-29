@@ -5,9 +5,10 @@ model Project {
   description  String   @db.Text
   images       String[]
   technologies String[]
-  liveLink     String?
-  frontendLink String?
-  backendLink  String?
+  liveLink      String?
+  frontendLink  String?
+  backendLink   String?
+  demoVideoLink String?
   challenges   String[]
   improvements String[]
   sortOrder    Int      @default(0)

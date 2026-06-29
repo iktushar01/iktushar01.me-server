@@ -11,6 +11,7 @@ export const createProjectSchema = z.object({
   liveLink: urlOrEmpty,
   frontendLink: urlOrEmpty,
   backendLink: urlOrEmpty,
+  demoVideoLink: urlOrEmpty,
   challenges: z.array(z.string()).default([]),
   improvements: z.array(z.string()).default([]),
   sortOrder: z.number().int().optional(),
