@@ -2,6 +2,7 @@
 import { BlogStatus } from "../lib/prisma-exports";
 import { prisma } from "../lib/prisma";
 import { estimateReadingTime } from "../module/portfolio/portfolio.helpers";
+import { blogsSeed } from "./blogs-seed";
 
 const projectsSeed = [
   {
@@ -344,12 +345,8 @@ const activitiesSeed = [
   },
 ] as const;
 
-async function seedBlogsFromFrontend() {
-  const { blogPostsData } = await import(
-    "../../../../iktushar01.me/src/components/data/blogs.ts"
-  );
-
-  for (const post of blogPostsData) {
+async function seedBlogs() {
+  for (const post of blogsSeed) {
     await prisma.blogPost.create({
       data: {
         title: post.title,
@@ -407,7 +404,7 @@ export const seedPortfolio = async () => {
     }
 
     if (existingBlogs === 0) {
-      await seedBlogsFromFrontend();
+      await seedBlogs();
     }
 
     console.log("Portfolio data seeded successfully.");

@@ -43,5 +43,5 @@
     "skipLibCheck": true,
   },
     "include": ["src/**/*"],
-    "exclude": ["src/app/utils/seed-portfolio.ts", "src/app/utils/run-seed-portfolio.ts"]
+    "exclude": ["src/app/utils/run-seed-portfolio.ts"]
 }
