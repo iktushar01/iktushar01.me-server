@@ -2,6 +2,11 @@ import { z } from "zod";
 
 const urlOrEmpty = z.union([z.string().url(), z.literal("")]).optional();
 
+const optionalUrl = z.preprocess(
+  (val) => (typeof val === "string" && val.trim() === "" ? null : val),
+  z.union([z.string().url(), z.null()]).optional()
+);
+
 export const createProjectSchema = z.object({
   title: z.string().min(1).max(200),
   tag: z.string().min(1).max(100),
@@ -11,7 +16,7 @@ export const createProjectSchema = z.object({
   liveLink: urlOrEmpty,
   frontendLink: urlOrEmpty,
   backendLink: urlOrEmpty,
-  demoVideoLink: urlOrEmpty,
+  demoVideoLink: optionalUrl,
   challenges: z.array(z.string()).default([]),
   improvements: z.array(z.string()).default([]),
   sortOrder: z.number().int().optional(),
