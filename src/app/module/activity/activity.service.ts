@@ -1,12 +1,23 @@
 import { StatusCodes } from "http-status-codes";
 import AppError from "../../errorHelpers/AppError";
+import { IQueryParams } from "../../interfaces/query.interface";
 import { prisma } from "../../lib/prisma";
 import { QueryBuilder } from "../../utils/QueryBuilder";
 import { publishedWhere, slugify, asQueryModel } from "../portfolio/portfolio.helpers";
 
 export const ActivityService = {
   async getPublished(query: Record<string, unknown>) {
-    return new QueryBuilder(asQueryModel(prisma.activity), query, {
+    const normalizedQuery: IQueryParams = {
+      ...(query as IQueryParams),
+      sortBy: typeof query.sortBy === "string" && query.sortBy.trim() ? query.sortBy : "sortOrder",
+      sortOrder:
+        typeof query.sortOrder === "string" &&
+        (query.sortOrder === "asc" || query.sortOrder === "desc")
+          ? query.sortOrder
+          : "asc",
+    };
+
+    return new QueryBuilder(asQueryModel(prisma.activity), normalizedQuery, {
       searchableFields: ["title", "organizer", "shortDescription"],
       filterableFields: ["type", "isPublished"],
     })
@@ -29,7 +40,17 @@ export const ActivityService = {
   },
 
   async getAllAdmin(query: Record<string, unknown>) {
-    return new QueryBuilder(asQueryModel(prisma.activity), query, {
+    const normalizedQuery: IQueryParams = {
+      ...(query as IQueryParams),
+      sortBy: typeof query.sortBy === "string" && query.sortBy.trim() ? query.sortBy : "sortOrder",
+      sortOrder:
+        typeof query.sortOrder === "string" &&
+        (query.sortOrder === "asc" || query.sortOrder === "desc")
+          ? query.sortOrder
+          : "asc",
+    };
+
+    return new QueryBuilder(asQueryModel(prisma.activity), normalizedQuery, {
       searchableFields: ["title", "organizer", "slug"],
       filterableFields: ["type", "isPublished"],
     })
